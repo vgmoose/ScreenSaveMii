@@ -23,7 +23,7 @@ include $(DEVKITPPC)/wii_rules
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	source
-DATA		:=
+DATA		:=  data
 TEXTURES	:=	textures
 INCLUDES	:=
 
@@ -39,7 +39,7 @@ LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:=	-lwiiuse -lbte -logc -lm -lasnd
+LIBS	:=	-lwiiuse -lbte  -lasnd -laesnd -logc -lm -lmad
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
@@ -126,6 +126,18 @@ else
 #---------------------------------------------------------------------------------
 $(OUTPUT).dol: $(OUTPUT).elf
 $(OUTPUT).elf: $(OFILES)
+
+
+#---------------------------------------------------------------------------------
+# This rule links in binary data with the .mp3 extension
+#---------------------------------------------------------------------------------
+%.mp3.o	:	%.mp3
+#---------------------------------------------------------------------------------
+	@echo $(notdir $<)
+	$(bin2o)
+
+-include $(DEPENDS)
+
 
 #---------------------------------------------------------------------------------
 # This rule links in binary data with the .bin extension
