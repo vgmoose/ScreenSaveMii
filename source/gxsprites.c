@@ -12,9 +12,14 @@
 #include <gccore.h>
 #include <wiiuse/wpad.h>
 #include <ogc/tpl.h>
+#include <asndlib.h>
+#include <mp3player.h>
 
 #include "textures_tpl.h"
 #include "textures.h"
+//#include "HomeMenu.h"
+#include "sample_mp3.h"
+
  
 #define DEFAULT_FIFO_SIZE	(256*1024)
 
@@ -52,7 +57,10 @@ int main( int argc, char **argv ){
 	int i;
 
 	VIDEO_Init();
-    HomeMenu_Init();
+//    HomeMenu_Init();
+    
+    ASND_Init(NULL);
+	MP3Player_Init();
  
 	rmode = VIDEO_GetPreferredMode(NULL);
 	
@@ -140,12 +148,14 @@ int main( int argc, char **argv ){
 		if(rand() & 1)
 			sprites[i].dy = -sprites[i].dy;
 	}
+    
+    MP3Player_PlayBuffer(sample_mp3, sample_mp3_size, NULL);
 
 	while(1) {
 
 		WPAD_ScanPads();
 
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME) HomeMenu_Show();
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME) exit(0);//HomeMenu_Show();
 
 		GX_SetViewport(0,0,rmode->fbWidth,rmode->efbHeight,0,1);
 		GX_InvVtxCache();
